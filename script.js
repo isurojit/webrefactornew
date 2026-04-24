@@ -1,6 +1,6 @@
 /**
  * Web Refactor - Enhanced JavaScript
- * With more parallax and animations
+ * Fixed for Mobile
  */
 
 "use strict";
@@ -37,7 +37,26 @@ document.addEventListener("DOMContentLoaded", () => {
   initCurrentYear();
   initCounterAnimation();
   initParallax();
+  fixMobileOverflow();
 });
+
+// ========================================
+// Fix Mobile Overflow
+// ========================================
+function fixMobileOverflow() {
+  // Ensure no horizontal scroll
+  document.body.style.overflowX = "hidden";
+  document.documentElement.style.overflowX = "hidden";
+
+  // Fix viewport width
+  const setVW = () => {
+    let vw = window.innerWidth * 0.01;
+    document.documentElement.style.setProperty("--vw", `${vw}px`);
+  };
+
+  setVW();
+  window.addEventListener("resize", setVW);
+}
 
 // ========================================
 // AOS Animation
@@ -45,9 +64,9 @@ document.addEventListener("DOMContentLoaded", () => {
 function initAOS() {
   if (typeof AOS !== "undefined") {
     AOS.init({
-      duration: 1000,
+      duration: 800,
       easing: "ease-out-cubic",
-      once: false,
+      once: true,
       offset: 50,
       delay: 0,
       anchorPlacement: "top-bottom",
@@ -62,15 +81,15 @@ function createParticles() {
   const particlesContainer = document.querySelector(".hero-particles");
   if (!particlesContainer) return;
 
-  const particleCount = 50;
+  const particleCount = 30;
 
   for (let i = 0; i < particleCount; i++) {
     const particle = document.createElement("div");
     particle.className = "particle";
     particle.style.cssText = `
             position: absolute;
-            width: ${Math.random() * 5 + 2}px;
-            height: ${Math.random() * 5 + 2}px;
+            width: ${Math.random() * 4 + 2}px;
+            height: ${Math.random() * 4 + 2}px;
             background: rgba(59, 130, 246, ${Math.random() * 0.5 + 0.2});
             border-radius: 50%;
             left: ${Math.random() * 100}%;
@@ -82,7 +101,6 @@ function createParticles() {
     particlesContainer.appendChild(particle);
   }
 
-  // Add particle animation style
   const style = document.createElement("style");
   style.textContent = `
         @keyframes particleFloat {
@@ -90,12 +108,8 @@ function createParticles() {
                 transform: translate(0, 0) scale(1);
                 opacity: 0;
             }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
             100% {
                 transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) scale(0);
                 opacity: 0;
@@ -106,7 +120,7 @@ function createParticles() {
 }
 
 // ========================================
-// Mobile Menu
+// Mobile Menu - FIXED
 // ========================================
 function initMobileMenu() {
   if (!DOM.hamburger || !DOM.navLinks) return;
@@ -221,13 +235,11 @@ function initParallax() {
     () => {
       const scrollY = window.scrollY;
 
-      // Parallax orbs
       orbs.forEach((orb, index) => {
         const speed = (index + 1) * 0.1;
         orb.style.transform = `translateY(${scrollY * speed}px)`;
       });
 
-      // Parallax cards
       cards.forEach((card, index) => {
         const speed = (index + 1) * 0.05;
         card.style.transform = `translateY(${scrollY * speed * -1}px)`;
@@ -507,6 +519,7 @@ function showNotification(message, type) {
         box-shadow: 0 10px 30px rgba(0,0,0,0.2);
         z-index: 9999;
         animation: slideIn 0.3s ease;
+        max-width: calc(100% - 40px);
     `;
   notification.innerHTML = `<i class="fas fa-${type === "success" ? "check-circle" : "exclamation-circle"}"></i> ${message}`;
   document.body.appendChild(notification);
