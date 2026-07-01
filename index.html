@@ -1,1360 +1,1231 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Primary Meta Tags -->
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-    />
-    <meta name="theme-color" content="#3b82f6" />
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WebRefactor — refactor your online presence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117;
+  --bg-elev:#161b22;
+  --bg-hover:#1c2128;
+  --bg-inset:#010409;
+  --border:#30363d;
+  --border-muted:#21262d;
+  --text:#c9d1d9;
+  --text-dim:#8b949e;
+  --text-bright:#f0f6fc;
+  --green:#3fb950;
+  --green-bg:#238636;
+  --green-bg-hover:#2ea043;
+  --red:#f85149;
+  --blue:#58a6ff;
+  --yellow:#d29922;
+  --purple:#bc8cff;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:'Inter',system-ui,sans-serif;
+  --radius:6px;
+}
+html[data-theme="light"]{
+  --bg:#ffffff;
+  --bg-elev:#f6f8fa;
+  --bg-hover:#eef1f4;
+  --bg-inset:#f0f2f5;
+  --border:#d0d7de;
+  --border-muted:#e3e7eb;
+  --text:#37414b;
+  --text-dim:#59636e;
+  --text-bright:#1b1f24;
+  --green:#1a7f37;
+  --green-bg:#1a7f37;
+  --green-bg-hover:#187535;
+  --red:#cf222e;
+  --blue:#0969da;
+  --yellow:#9a6700;
+  --purple:#8250df;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--sans);
+  font-size:19.5px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+  transition:background .25s ease,color .25s ease;
+}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+::selection{background:rgba(63,185,80,0.3);color:var(--text-bright);}
 
-    <!-- SEO Meta Tags -->
-    <title>
-      Web Refactor - Professional Web Development & Design Services | Websites
-      That Rank, Engage, and Convert
-    </title>
-    <meta
-      name="description"
-      content="Expert web development, e-commerce solutions, SEO optimization, and UI/UX design. Transform your online presence with custom websites that rank, engage, and convert."
-    />
-    <meta
-      name="keywords"
-      content="web development, website design, e-commerce, SEO, UI/UX design, digital marketing, responsive design, web applications"
-    />
-    <meta name="author" content="Web Refactor" />
-    <meta name="robots" content="index, follow" />
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
 
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://webrefactor.com/" />
+/* ---------- editor chrome header ---------- */
+.chrome{
+  position:sticky;top:0;z-index:100;
+  background:var(--bg-inset);
+  border-bottom:1px solid var(--border-muted);
+}
+.chrome-bar{
+  display:flex;align-items:center;gap:16px;
+  padding:10px 20px;
+  border-bottom:1px solid var(--border-muted);
+}
+.chrome-dots{display:flex;gap:7px;flex-shrink:0;}
+.chrome-dots span{width:11px;height:11px;border-radius:50%;display:block;}
+.chrome-dots span:nth-child(1){background:#ff5f56;}
+.chrome-dots span:nth-child(2){background:#ffbd2e;}
+.chrome-dots span:nth-child(3){background:#27c93f;}
+.chrome-address{
+  font-family:var(--mono);font-size:14px;color:var(--text-dim);
+  background:var(--bg-elev);border:1px solid var(--border-muted);
+  border-radius:5px;padding:4px 12px;flex:1;max-width:340px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.chrome-repo{
+  margin-left:auto;display:flex;align-items:center;gap:8px;
+  font-family:var(--mono);font-size:14px;color:var(--text-dim);
+  white-space:nowrap;
+}
+.chrome-repo .dot{width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 6px var(--green);flex-shrink:0;}
+.chrome-repo b{color:var(--text-bright);font-weight:600;}
+@media(max-width:640px){.chrome-address{display:none;}}
 
-    <!-- Open Graph -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://webrefactor.com/" />
-    <meta
-      property="og:title"
-      content="Web Refactor - Professional Web Development Services"
-    />
-    <meta
-      property="og:description"
-      content="Expert web development, e-commerce solutions, SEO optimization, and UI/UX design."
-    />
-    <meta
-      property="og:image"
-      content="https://webrefactor.com/images/og-image.jpg"
-    />
+.tabs{
+  display:flex;overflow-x:auto;scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  font-family:var(--mono);font-size:15.5px;
+  color:var(--text-dim);
+  padding:12px 18px;
+  border-right:1px solid var(--border-muted);
+  display:flex;align-items:center;gap:8px;
+  white-space:nowrap;flex-shrink:0;
+  background:transparent;
+  border-top:2px solid transparent;
+  transition:color .15s,background .15s;
+}
+.tab:hover{color:var(--text);background:var(--bg-elev);}
+.tab .dot{width:6px;height:6px;border-radius:50%;background:var(--border);flex-shrink:0;}
+.tab.active{
+  color:var(--text-bright);
+  background:var(--bg);
+  border-top-color:var(--green);
+}
+.tab.active .dot{background:var(--green);box-shadow:0 0 5px var(--green);}
 
-    <!-- Favicon -->
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href="images/favicon-32x32.png"
-    />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="images/apple-touch-icon.png"
-    />
+/* ---------- layout helpers ---------- */
+section{padding:104px 0;border-bottom:1px solid var(--border-muted);position:relative;overflow:hidden;}
+.eyebrow{
+  font-family:var(--mono);font-size:15.5px;color:var(--text-dim);
+  display:flex;align-items:center;gap:10px;margin-bottom:20px;
+}
+.eyebrow::before{content:'//';color:var(--green);font-weight:700;}
+h2.title{
+  font-family:var(--mono);font-weight:800;font-size:clamp(32px,4.6vw,48px);
+  color:var(--text-bright);letter-spacing:-0.5px;margin-bottom:16px;
+}
+.lede{color:var(--text-dim);font-size:20px;max-width:580px;margin-bottom:56px;}
 
-    <!-- Preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+/* ---------- hero ---------- */
+.hero{padding:96px 0 112px;position:relative;overflow:hidden;}
+.hero::before{
+  content:'';position:absolute;top:-200px;right:-150px;width:600px;height:600px;
+  background:radial-gradient(circle,rgba(63,185,80,0.1),transparent 70%);
+  pointer-events:none;
+  will-change:transform;
+  transform:translateY(var(--glowY,0px));
+}
+html[data-theme="light"] .hero::before{background:radial-gradient(circle,rgba(26,127,55,0.08),transparent 70%);}
+.hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:60px;align-items:center;position:relative;z-index:2;}
+.parallax-field{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
+.frag{
+  position:absolute;font-family:var(--mono);font-size:14.5px;color:var(--text-dim);
+  opacity:0.35;white-space:nowrap;will-change:transform;
+}
+section .parallax-field{z-index:0;}
+@media(max-width:800px){.frag{display:none;}}
+@media(max-width:900px){.hero-grid{grid-template-columns:1fr;gap:44px;}}
 
-    <!-- Google Fonts -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+.diffblock{
+  background:var(--bg-inset);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  font-family:var(--mono);font-size:17px;
+  box-shadow:0 24px 60px -20px rgba(0,0,0,0.6);
+  position:relative;z-index:2;
+  will-change:transform;
+}
+.diffblock-head{
+  padding:9px 14px;border-bottom:1px solid var(--border);
+  color:var(--text-dim);font-size:13.5px;display:flex;justify-content:space-between;
+}
+.diffblock-head span:last-child{color:var(--yellow);}
+.dline{display:flex;}
+.dline .num{
+  width:34px;flex-shrink:0;text-align:right;padding-right:12px;
+  color:#484f58;user-select:none;
+}
+.dline .marker{width:20px;flex-shrink:0;text-align:center;font-weight:700;}
+.dline .code{padding:2px 14px 2px 0;white-space:pre;overflow-x:auto;color:var(--text);}
+.dline--ctx .marker{color:#484f58;}
+.dline--rem{background:rgba(248,81,73,0.08);}
+.dline--rem .marker{color:var(--red);}
+.dline--rem .code{color:#ffa198;text-decoration:line-through;text-decoration-color:rgba(255,161,152,0.5);}
+.dline--add{background:rgba(63,185,80,0.1);}
+.dline--add .marker{color:var(--green);}
+.dline--add .code{color:#7ee2a8;}
+.cursor{display:inline-block;width:8px;height:15px;background:var(--green);
+  vertical-align:middle;animation:blink 1s step-end infinite;margin-left:2px;}
+@keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:0;}}
 
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
+.hero-copy{position:relative;z-index:2;}
+.hero-copy h1{
+  font-family:var(--mono);font-weight:800;
+  font-size:clamp(34px,4.8vw,52px);line-height:1.15;
+  color:var(--text-bright);letter-spacing:-0.5px;margin-bottom:22px;
+}
+.hero-copy h1 .hl{color:var(--green);}
+.hero-copy p{color:var(--text-dim);font-size:20px;max-width:500px;margin-bottom:34px;}
+.btn-row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px;}
+.btn{
+  font-family:var(--mono);font-size:17px;font-weight:600;
+  padding:13px 24px;border-radius:6px;border:1px solid transparent;
+  display:inline-flex;align-items:center;gap:8px;transition:all .15s;
+}
+.btn-primary{background:var(--green-bg);color:#fff;}
+.btn-primary:hover{background:var(--green-bg-hover);transform:translateY(-1px);}
+.btn-outline{border-color:var(--border);color:var(--text);}
+.btn-outline:hover{background:var(--bg-elev);border-color:var(--text-dim);transform:translateY(-1px);}
 
-    <!-- AOS Animation -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+.stat-row{display:flex;gap:30px;flex-wrap:wrap;}
+.stat{font-family:var(--mono);}
+.stat .n{font-size:30px;font-weight:800;color:var(--green);}
+.stat .n::before{content:'+';}
+.stat .l{font-size:14px;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.06em;}
 
-    <!-- Swiper CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
-    />
+/* ---------- theme toggle ---------- */
+.theme-toggle{
+  display:flex;align-items:center;gap:6px;background:var(--bg-elev);
+  border:1px solid var(--border-muted);border-radius:20px;padding:3px;flex-shrink:0;
+}
+.theme-toggle button{
+  width:28px;height:28px;border-radius:50%;border:none;background:transparent;
+  color:var(--text-dim);display:flex;align-items:center;justify-content:center;
+  font-size:15.5px;transition:background .15s,color .15s;
+}
+.theme-toggle button.active{background:var(--green-bg);color:#fff;}
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="styles.css" />
+/* ---------- git log / process ---------- */
+.commitlog{position:relative;padding-left:36px;}
+.commit{position:relative;padding-bottom:40px;}
+.commit:last-child{padding-bottom:0;}
+.commit::before{
+  content:'';position:absolute;left:-25px;top:6px;width:11px;height:11px;
+  border-radius:50%;background:var(--bg);border:2px solid var(--green);
+}
+.commit::after{
+  content:'';position:absolute;left:-20px;top:20px;bottom:-6px;width:1px;
+  background:var(--border);
+}
+.commit:last-child::after{display:none;}
+.commit-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px;}
+.commit-hash{font-family:var(--mono);font-size:14px;color:var(--yellow);background:rgba(210,153,34,0.1);
+  padding:2px 8px;border-radius:4px;}
+.commit-msg{font-family:var(--mono);font-weight:700;color:var(--text-bright);font-size:18px;}
+.commit-body{color:var(--text-dim);font-size:17px;max-width:520px;margin-bottom:8px;}
+.commit-files{font-family:var(--mono);font-size:13.5px;color:var(--text-dim);}
+.commit-files b{color:var(--green);}
 
-    <!-- Schema.org -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "ProfessionalService",
-        "name": "Web Refactor",
-        "url": "https://webrefactor.com/",
-        "description": "Professional web development, e-commerce solutions, SEO optimization, and UI/UX design services.",
-        "priceRange": "$$",
-        "email": "admin@webrefactor.com"
-      }
-    </script>
-  </head>
-  <body itemscope itemtype="https://schema.org/WebPage">
-    <!-- Skip Link -->
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+/* ---------- expertise file tabs ---------- */
+.expertise{margin-top:64px;}
+.filetabs{display:flex;flex-wrap:wrap;border-bottom:1px solid var(--border);margin-bottom:0;}
+.filetab{
+  font-family:var(--mono);font-size:14.5px;color:var(--text-dim);
+  padding:10px 16px;border:1px solid transparent;border-bottom:none;
+  border-radius:6px 6px 0 0;background:transparent;display:flex;align-items:center;gap:8px;
+}
+.filetab .sq{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.filetab.active{color:var(--text-bright);background:var(--bg-elev);border-color:var(--border);}
+.filepanel{
+  background:var(--bg-elev);border:1px solid var(--border);border-radius:0 6px 6px 6px;
+  padding:32px;font-family:var(--mono);display:none;
+}
+.filepanel.active{display:block;}
+.filepanel .obj-line{font-size:15px;color:var(--text-dim);}
+.filepanel .key{color:var(--blue);}
+.filepanel .str{color:var(--green);}
+.filepanel h3{font-family:var(--sans);font-size:22.5px;color:var(--text-bright);margin:14px 0 10px;}
+.filepanel p{font-family:var(--sans);color:var(--text-dim);font-size:17px;max-width:480px;margin-bottom:16px;}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{font-family:var(--mono);font-size:13.5px;color:var(--text);border:1px solid var(--border);
+  padding:4px 10px;border-radius:20px;background:var(--bg);}
 
-    <!-- Navigation -->
-    <nav class="navbar" role="navigation" aria-label="Main navigation">
-      <div class="nav-container">
-        <a href="#home" class="logo">
-          <h2>Web<span class="accent">Refactor</span></h2>
-        </a>
+/* ---------- portfolio ---------- */
+.filterrow{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:36px;}
+.filterbtn{
+  font-family:var(--mono);font-size:14px;color:var(--text-dim);
+  border:1px solid var(--border);border-radius:20px;padding:6px 14px;background:transparent;
+}
+.filterbtn.active{background:var(--green-bg);border-color:var(--green-bg);color:#fff;}
+.worklist{display:flex;flex-direction:column;}
+.workitem{
+  display:grid;grid-template-columns:110px 1fr auto;gap:20px;align-items:center;
+  padding:20px 0;border-bottom:1px solid var(--border-muted);
+}
+.workitem:last-child{border-bottom:none;}
+.workitem .hash{font-family:var(--mono);font-size:14px;color:var(--text-dim);}
+.workitem .main strong{font-family:var(--mono);font-size:18px;color:var(--text-bright);display:block;margin-bottom:4px;}
+.workitem .main span{color:var(--text-dim);font-size:15.5px;display:block;max-width:460px;}
+.tag{font-family:var(--mono);font-size:12.5px;padding:3px 9px;border-radius:12px;white-space:nowrap;font-weight:600;}
+.tag--corporate{background:rgba(88,166,255,0.12);color:var(--blue);}
+.tag--e-commerce{background:rgba(188,140,255,0.12);color:var(--purple);}
+.tag--ngo{background:rgba(210,153,34,0.14);color:var(--yellow);}
+.tag--service{background:rgba(248,81,73,0.12);color:var(--red);}
+.workitem .visit{font-family:var(--mono);font-size:14px;color:var(--green);white-space:nowrap;}
+.workitem .visit:hover{text-decoration:underline;}
+@media(max-width:640px){.workitem{grid-template-columns:1fr;gap:8px;}.workitem .hash{order:3;}}
 
-        <button
-          class="hamburger-menu"
-          aria-label="Toggle navigation menu"
-          aria-expanded="false"
-          aria-controls="nav-menu"
-        >
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-          <span class="hamburger-line"></span>
-        </button>
+/* ---------- pricing ---------- */
+.region-toggle{display:flex;gap:8px;margin-bottom:36px;}
+.regionbtn{
+  font-family:var(--mono);font-size:14.5px;color:var(--text-dim);
+  border:1px solid var(--border);border-radius:20px;padding:7px 16px;background:transparent;
+  display:flex;align-items:center;gap:7px;
+}
+.regionbtn.active{background:var(--green-bg);border-color:var(--green-bg);color:#fff;}
+.discount-banner{
+  font-family:var(--mono);font-size:15px;color:var(--green);
+  background:rgba(63,185,80,0.1);border:1px solid rgba(63,185,80,0.3);
+  border-radius:6px;padding:10px 16px;margin-bottom:32px;display:inline-block;
+}
+.price-old{
+  font-family:var(--mono);font-size:19px;color:var(--red);text-decoration:line-through;
+  text-decoration-color:rgba(248,81,73,0.6);margin-right:8px;font-weight:600;
+}
+.price-cut{
+  font-family:var(--mono);font-size:12.5px;color:#fff;background:var(--red);
+  border-radius:4px;padding:2px 7px;vertical-align:middle;font-weight:700;
+}
+.pricegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media(max-width:860px){.pricegrid{grid-template-columns:1fr;}}
+.pricecard{
+  background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;
+  padding:30px;position:relative;display:flex;flex-direction:column;
+}
+.pricecard.popular{border-color:var(--green);box-shadow:0 0 0 1px var(--green);}
+.pricecard .badge{
+  position:absolute;top:-12px;right:24px;background:var(--green-bg);color:#fff;
+  font-family:var(--mono);font-size:12.5px;font-weight:700;padding:4px 10px;border-radius:20px;
+}
+.pkgname{font-family:var(--mono);font-size:14.5px;color:var(--text-dim);margin-bottom:6px;}
+.pkgname::before{content:'@webrefactor/';color:var(--text-dim);}
+.pkgname b{color:var(--green);}
+.pricecard h3{font-family:var(--sans);font-size:24.5px;color:var(--text-bright);margin-bottom:14px;}
+.price{font-family:var(--mono);font-size:42.5px;font-weight:800;color:var(--text-bright);margin-bottom:2px;}
+.price span{font-size:15.5px;color:var(--text-dim);font-weight:400;}
+.pricecard .sub{color:var(--text-dim);font-size:15px;margin-bottom:22px;}
+.depslist{list-style:none;margin-bottom:26px;flex:1;}
+.depslist li{
+  font-family:var(--mono);font-size:15px;color:var(--text);
+  padding:7px 0;border-bottom:1px solid var(--border-muted);display:flex;gap:9px;
+}
+.depslist li::before{content:'+';color:var(--green);font-weight:700;}
+.pricecard .btn{width:100%;justify-content:center;}
 
-        <ul class="nav-links" id="nav-menu">
-          <li><a href="#home" class="nav-link">Home</a></li>
-          <li><a href="#services" class="nav-link">Services</a></li>
-          <li><a href="#portfolio" class="nav-link">Portfolio</a></li>
-          <li><a href="#pricing" class="nav-link">Pricing</a></li>
-          <li><a href="#calculator" class="nav-link">Calculator</a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
+/* ---------- calculator ---------- */
+.terminal{
+  background:var(--bg-inset);border:1px solid var(--border);border-radius:8px;overflow:hidden;
+  box-shadow:0 24px 60px -24px rgba(0,0,0,0.7);
+}
+.term-head{
+  display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid var(--border);
+}
+.term-head .chrome-dots span{width:10px;height:10px;}
+.term-head .lbl{font-family:var(--mono);font-size:14px;color:var(--text-dim);}
+.term-body{padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:40px;}
+@media(max-width:800px){.term-body{grid-template-columns:1fr;}}
+.field{margin-bottom:22px;}
+.field label{
+  display:block;font-family:var(--mono);font-size:14px;color:var(--text-dim);margin-bottom:8px;
+}
+.field label::before{content:'--';color:var(--blue);}
+.field select, .field input[type=range]{width:100%;}
+.field select{
+  background:var(--bg-elev);border:1px solid var(--border);color:var(--text);
+  padding:10px 12px;border-radius:6px;font-family:var(--mono);font-size:15px;
+}
+.rangewrap{display:flex;align-items:center;gap:14px;}
+.rangewrap input[type=range]{accent-color:var(--green);}
+.rangeval{font-family:var(--mono);font-size:15px;color:var(--green);min-width:44px;text-align:right;}
+.checkgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;}
+@media(max-width:480px){.checkgrid{grid-template-columns:1fr;}}
+.checkline{display:flex;align-items:center;gap:9px;font-family:var(--mono);font-size:14.5px;color:var(--text);}
+.checkline input{accent-color:var(--green);width:15px;height:15px;}
+.radiorow{display:flex;gap:10px;flex-wrap:wrap;}
+.radiopill{
+  font-family:var(--mono);font-size:14px;border:1px solid var(--border);border-radius:20px;
+  padding:6px 14px;color:var(--text-dim);position:relative;cursor:pointer;
+}
+.radiopill input{position:absolute;opacity:0;pointer-events:none;}
+.radiopill.checked{background:rgba(63,185,80,0.1);border-color:var(--green);color:var(--green);}
+
+.output{
+  grid-column:1/-1;background:var(--bg-elev);border:1px solid var(--border);border-radius:6px;
+  padding:24px 26px;font-family:var(--mono);font-size:15.5px;
+}
+.output .comment{color:var(--text-dim);}
+.output .brace{color:var(--text);}
+.output .key{color:var(--blue);}
+.output .val{color:var(--green);}
+.output-line{padding-left:18px;}
+.calc-note{font-family:var(--sans);font-size:14px;color:var(--text-dim);margin-top:14px;grid-column:1/-1;}
+
+/* ---------- reviews ---------- */
+.reviewgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+@media(max-width:900px){.reviewgrid{grid-template-columns:1fr 1fr;}}
+@media(max-width:640px){.reviewgrid{grid-template-columns:1fr;}}
+.reviewcard{
+  background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;padding:22px;
+}
+.review-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.avatar{
+  width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-weight:700;font-size:14.5px;color:#0d1117;flex-shrink:0;
+}
+.review-name{font-size:16px;font-weight:600;color:var(--text-bright);}
+.review-role{font-size:14px;color:var(--text-dim);font-family:var(--mono);}
+.approved{
+  margin-left:auto;font-family:var(--mono);font-size:12px;color:var(--green);
+  border:1px solid var(--green);border-radius:12px;padding:2px 8px;white-space:nowrap;
+}
+.reviewcard p{font-size:16px;color:var(--text);}
+
+/* ---------- contact ---------- */
+.contact-grid{display:grid;grid-template-columns:0.9fr 1.1fr;gap:56px;}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr;}}
+.whoami{font-family:var(--mono);font-size:15px;line-height:2;}
+.whoami .k{color:var(--text-dim);}
+.whoami .v{color:var(--text-bright);}
+.whoami a.v:hover{color:var(--green);}
+.social-row{display:flex;gap:10px;margin-top:22px;}
+.social-row a{
+  width:36px;height:36px;border:1px solid var(--border);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13.5px;color:var(--text-dim);
+}
+.social-row a:hover{border-color:var(--green);color:var(--green);}
+
+.commitform{background:var(--bg-inset);border:1px solid var(--border);border-radius:8px;padding:28px;}
+.commitform .prompt{font-family:var(--mono);font-size:15px;color:var(--text-dim);margin-bottom:18px;}
+.commitform .prompt b{color:var(--green);}
+.formfield{margin-bottom:16px;}
+.formfield label{display:block;font-family:var(--mono);font-size:13.5px;color:var(--text-dim);margin-bottom:6px;}
+.formfield input, .formfield textarea{
+  width:100%;background:var(--bg-elev);border:1px solid var(--border);border-radius:6px;
+  padding:11px 13px;color:var(--text);font-family:var(--mono);font-size:15px;
+}
+.formfield input:focus, .formfield textarea:focus{outline:2px solid var(--green);outline-offset:1px;}
+.formfield textarea{resize:vertical;min-height:90px;}
+.form-msg{font-family:var(--mono);font-size:14.5px;color:var(--green);margin-top:14px;display:none;}
+.form-msg.show{display:block;}
+
+/* ---------- footer ---------- */
+footer{padding:60px 0 40px;}
+.footgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;margin-bottom:40px;}
+@media(max-width:700px){.footgrid{grid-template-columns:1fr;}}
+.footgrid h4{font-family:var(--mono);font-size:14px;color:var(--text-dim);margin-bottom:14px;}
+.footgrid h4::before{content:'## ';color:var(--green);}
+.footgrid ul{list-style:none;}
+.footgrid li{margin-bottom:9px;font-size:15.5px;}
+.footgrid li a:hover{color:var(--green);}
+.foot-brand{font-family:var(--mono);font-weight:800;font-size:20px;color:var(--text-bright);margin-bottom:10px;}
+.foot-brand span{color:var(--green);}
+.foot-desc{color:var(--text-dim);font-size:15.5px;max-width:340px;}
+.badgerow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.badge{
+  font-family:var(--mono);font-size:12.5px;display:flex;border-radius:4px;overflow:hidden;border:1px solid var(--border-muted);
+}
+.badge span{padding:4px 8px;}
+.badge span:first-child{background:#21262d;color:var(--text-dim);}
+.badge span:last-child{background:var(--green-bg);color:#fff;}
+.foot-bottom{
+  border-top:1px solid var(--border-muted);padding-top:24px;
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  font-family:var(--mono);font-size:14px;color:var(--text-dim);
+}
+
+/* ---------- whatsapp fab ---------- */
+.wa-fab{
+  position:fixed;right:22px;bottom:22px;z-index:200;
+  display:flex;align-items:center;gap:0;
+  background:#25D366;color:#fff;border-radius:30px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.35);
+  overflow:hidden;transition:box-shadow .2s;
+}
+.wa-fab:hover{box-shadow:0 10px 30px rgba(0,0,0,0.45);}
+.wa-fab .wa-icon{
+  width:56px;height:56px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+}
+.wa-fab .wa-label{
+  max-width:0;overflow:hidden;white-space:nowrap;
+  font-family:var(--mono);font-size:15px;font-weight:600;
+  transition:max-width .25s ease,padding .25s ease;
+}
+.wa-fab:hover .wa-label{max-width:170px;padding-right:18px;}
+
+/* ---------- github repo badge ---------- */
+.gh-badge{
+  background:var(--bg-elev);border:1px solid var(--border);border-radius:8px;
+  padding:20px 22px;margin-top:26px;
+}
+.gh-badge-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.gh-badge-top svg{flex-shrink:0;}
+.gh-badge-name{font-family:var(--mono);font-weight:700;color:var(--text-bright);font-size:17px;}
+.gh-badge-desc{color:var(--text-dim);font-size:15.5px;margin-bottom:14px;}
+.gh-badge-meta{display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.gh-badge-meta span{
+  font-family:var(--mono);font-size:14px;color:var(--text-dim);
+  display:flex;align-items:center;gap:5px;
+}
+.gh-badge-meta .lang-dot{width:9px;height:9px;border-radius:50%;background:var(--blue);}
+.gh-badge .btn{margin-top:16px;width:100%;justify-content:center;}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;scroll-behavior:auto !important;}
+}
+</style>
+</head>
+<body>
+
+<header class="chrome">
+  <div class="chrome-bar">
+    <div class="chrome-dots"><span></span><span></span><span></span></div>
+    <div class="chrome-address">webrefactor.dev — refactor your presence</div>
+    <div class="chrome-repo"><span class="dot"></span><b>webrefactor</b>/main</div>
+    <div class="theme-toggle" id="theme-toggle" role="group" aria-label="Theme">
+      <button type="button" data-theme-btn="dark" class="active" aria-label="Dark mode">🌙</button>
+      <button type="button" data-theme-btn="light" aria-label="Light mode">☀️</button>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs">
+    <a class="tab" data-target="home" href="#home"><span class="dot"></span>home.tsx</a>
+    <a class="tab" data-target="services" href="#services"><span class="dot"></span>services.tsx</a>
+    <a class="tab" data-target="portfolio" href="#portfolio"><span class="dot"></span>portfolio.tsx</a>
+    <a class="tab" data-target="pricing" href="#pricing"><span class="dot"></span>pricing.tsx</a>
+    <a class="tab" data-target="calculator" href="#calculator"><span class="dot"></span>calculator.tsx</a>
+    <a class="tab" data-target="contact" href="#contact"><span class="dot"></span>contact.tsx</a>
+  </nav>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="home">
+  <div class="parallax-field" id="hero-parallax">
+    <span class="frag" data-speed="0.15" style="top:8%;left:6%;">const business = require('./legacy');</span>
+    <span class="frag" data-speed="0.3" style="top:18%;left:72%;">git commit -m "ship it"</span>
+    <span class="frag" data-speed="0.22" style="top:38%;left:2%;">npm run build --prod</span>
+    <span class="frag" data-speed="0.4" style="top:58%;left:80%;">status: 200 OK</span>
+    <span class="frag" data-speed="0.18" style="top:74%;left:10%;">export default Refactor;</span>
+    <span class="frag" data-speed="0.35" style="top:85%;left:65%;">// TODO: nothing. it ships.</span>
+  </div>
+  <div class="wrap hero-grid">
+    <div class="diffblock">
+      <div class="diffblock-head"><span>README.diff</span><span>unstaged changes</span></div>
+      <div class="dline dline--ctx"><span class="num">1</span><span class="marker"> </span><span class="code">// webrefactor/README.md</span></div>
+      <div class="dline dline--ctx"><span class="num">2</span><span class="marker"> </span><span class="code">export default function Site() {</span></div>
+      <div class="dline dline--rem"><span class="num">3</span><span class="marker">-</span><span class="code">  return &lt;Business slow unranked forgettable /&gt;</span></div>
+      <div class="dline dline--add"><span class="num">4</span><span class="marker">+</span><span class="code">  return &lt;Business fast ranked memorable /&gt;<span class="cursor"></span></span></div>
+      <div class="dline dline--ctx"><span class="num">5</span><span class="marker"> </span><span class="code">}</span></div>
+    </div>
+
+    <div class="hero-copy">
+      <h1>We refactor businesses into <span class="hl">fast, ranked, memorable</span> websites.</h1>
+      <p>Same business, better implementation. We rebuild slow, invisible, forgettable sites into ones that load fast, rank well, and get remembered — without touching what makes your business yours.</p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="#contact">Start a project →</a>
+        <a class="btn btn-outline" href="#portfolio">Review our work</a>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><div class="n">150</div><div class="l">Projects shipped</div></div>
+        <div class="stat"><div class="n">90</div><div class="l">Clients retained</div></div>
+        <div class="stat"><div class="n">6</div><div class="l">Years in production</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICES: process + expertise ============ -->
+<section id="services">
+  <div class="wrap">
+    <div class="eyebrow">git log --oneline --graph</div>
+    <h2 class="title">How a rebuild ships</h2>
+    <p class="lede">Four commits, in order. Nothing skips the queue — each one has to merge clean before the next opens.</p>
+
+    <div class="commitlog">
+      <div class="commit">
+        <div class="commit-head"><span class="commit-hash">a1b2c3d</span><span class="commit-msg">refactor: define</span></div>
+        <p class="commit-body">We map what makes your business distinct — audience, voice, and the one thing competitors can't copy — before any design starts.</p>
+        <div class="commit-files"><b>1</b> file changed · brand-brief.md</div>
+      </div>
+      <div class="commit">
+        <div class="commit-head"><span class="commit-hash">e4f5a6b</span><span class="commit-msg">refactor: design</span></div>
+        <p class="commit-body">Wireframes become interface. Every screen earns its place before it earns a pixel of polish.</p>
+        <div class="commit-files"><b>12</b> files changed · ui-kit/</div>
+      </div>
+      <div class="commit">
+        <div class="commit-head"><span class="commit-hash">9c8d7e6</span><span class="commit-msg">refactor: build</span></div>
+        <p class="commit-body">Built in React or Vue for the target, not the trend, with a performance budget enforced from the first commit.</p>
+        <div class="commit-files"><b>84</b> files changed · src/</div>
+      </div>
+      <div class="commit">
+        <div class="commit-head"><span class="commit-hash">f0e1d2c</span><span class="commit-msg">refactor: launch</span></div>
+        <p class="commit-body">Tested, indexed, and monitored, then we stay on call for the first month in case production disagrees with staging.</p>
+        <div class="commit-files"><b>3</b> files changed · deploy.yml</div>
+      </div>
+    </div>
+
+    <div class="expertise">
+      <div class="eyebrow">exports from services.tsx</div>
+      <h2 class="title">What's inside</h2>
+      <p class="lede">Six modules. Pick what your project imports.</p>
+
+      <div class="filetabs" id="filetabs" role="tablist">
+        <button class="filetab active" data-panel="frontend" style="border-color:var(--border)"><span class="sq" style="background:var(--blue)"></span>frontend.jsx</button>
+        <button class="filetab" data-panel="commerce"><span class="sq" style="background:var(--purple)"></span>commerce.ts</button>
+        <button class="filetab" data-panel="seo"><span class="sq" style="background:var(--green)"></span>seo.config</button>
+        <button class="filetab" data-panel="design"><span class="sq" style="background:var(--yellow)"></span>design.fig</button>
+        <button class="filetab" data-panel="brand"><span class="sq" style="background:var(--red)"></span>brand.kit</button>
+        <button class="filetab" data-panel="research"><span class="sq" style="background:var(--blue)"></span>research.md</button>
+      </div>
+
+      <div class="filepanel active" data-panel="frontend">
+        <div class="obj-line"><span class="key">const</span> service = {</div>
+        <h3>Frontend Development</h3>
+        <p>Interfaces built with React and Vue, tuned for the device in someone's hand — not the monitor on our desk.</p>
+        <div class="chiprow"><span class="chip">React & Vue.js</span><span class="chip">Responsive layout</span><span class="chip">Core Web Vitals</span></div>
+      </div>
+      <div class="filepanel" data-panel="commerce">
+        <div class="obj-line"><span class="key">const</span> service = {</div>
+        <h3>E-Commerce</h3>
+        <p>Storefronts that survive a sale-day traffic spike — from cart to checkout to reconciled inventory.</p>
+        <div class="chiprow"><span class="chip">Payment gateways</span><span class="chip">Inventory sync</span><span class="chip">Security first</span></div>
+      </div>
+      <div class="filepanel" data-panel="seo">
+        <div class="obj-line"><span class="key">const</span> service = {</div>
+        <h3>SEO Optimization</h3>
+        <p>Rankings earned through structure, not tricks — semantic markup, sitemap discipline, and content that answers the query.</p>
+        <div class="chiprow"><span class="chip">Keyword mapping</span><span class="chip">On-page SEO</span><span class="chip">Search Console reporting</span></div>
+      </div>
+      <div class="filepanel" data-panel="design">
+        <div class="obj-line"><span class="key">const</span> service = {</div>
+        <h3>Product Design</h3>
+        <p>Research first, pixels second — prototypes tested on real users before a line of production code exists.</p>
+        <div class="chiprow"><span class="chip">UI/UX design</span><span class="chip">Prototyping</span><span class="chip">Usability testing</span></div>
+      </div>
+      <div class="filepanel" data-panel="brand">
+        <div class="obj-line"><span class="key">const</span> service = {</div>
+        <h3>Branding</h3>
+        <p>A visual system your team can actually use — logo lockups, a type scale, and a voice guide that survives a rebrand of the rebrand.</p>
+        <div class="chiprow"><span class="chip">Logo & mark</span><span class="chip">Brand guidelines</span><span class="chip">Visual identity</span></div>
+      </div>
+      <div class="filepanel" data-panel="research">
+        <div class="obj-line"><span class="key">const</span> service = {</div>
+        <h3>UX Research</h3>
+        <p>We talk to your users before we talk to your developers. Interviews and surveys turn assumptions into decisions.</p>
+        <div class="chiprow"><span class="chip">User interviews</span><span class="chip">Surveys</span><span class="chip">Usability audits</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PORTFOLIO ============ -->
+<section id="portfolio">
+  <div class="wrap">
+    <div class="eyebrow">git log --stat --author=webrefactor</div>
+    <h2 class="title">Recently deployed</h2>
+    <p class="lede">Seven merges, seven different problems. Filter by the kind of business.</p>
+
+    <div class="filterrow" id="filterrow">
+      <button class="filterbtn active" data-filter="all">--all</button>
+      <button class="filterbtn" data-filter="e-commerce">--e-commerce</button>
+      <button class="filterbtn" data-filter="corporate">--corporate</button>
+      <button class="filterbtn" data-filter="ngo">--ngo</button>
+      <button class="filterbtn" data-filter="service">--service</button>
+    </div>
+
+    <div class="worklist" id="worklist">
+      <div class="workitem" data-cat="corporate">
+        <span class="hash">b3f1a90</span>
+        <div class="main"><strong>Incorpiq</strong><span>Corporate presence rebuilt for a consulting firm expanding into new markets.</span></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="tag tag--corporate">corporate</span>
+          <a class="visit" href="https://incorpiq.com" target="_blank" rel="noopener">visit →</a>
+        </div>
+      </div>
+      <div class="workitem" data-cat="e-commerce">
+        <span class="hash">7d2c441</span>
+        <div class="main"><strong>Pepedeals</strong><span>Full storefront refactor — faster checkout, cleaner catalog, more completed carts.</span></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="tag tag--e-commerce">e-commerce</span>
+          <a class="visit" href="https://pepedeals.com" target="_blank" rel="noopener">visit →</a>
+        </div>
+      </div>
+      <div class="workitem" data-cat="e-commerce">
+        <span class="hash">4a9e0f2</span>
+        <div class="main"><strong>Zyozi</strong><span>Automated order flow so the team stops copy-pasting spreadsheets.</span></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="tag tag--e-commerce">e-commerce</span>
+          <a class="visit" href="https://zyozi.com" target="_blank" rel="noopener">visit →</a>
+        </div>
+      </div>
+      <div class="workitem" data-cat="ngo">
+        <span class="hash">1c88d3e</span>
+        <div class="main"><strong>Gouri Sevapeeth</strong><span>A donation-first site that makes trust visible in the first scroll.</span></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="tag tag--ngo">ngo</span>
+          <a class="visit" href="https://gourisevapeeth.org/" target="_blank" rel="noopener">visit →</a>
+        </div>
+      </div>
+      <div class="workitem" data-cat="service">
+        <span class="hash">90bb217</span>
+        <div class="main"><strong>Patra Repair</strong><span>Local service site built to rank for the searches that turn into calls.</span></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="tag tag--service">service</span>
+          <a class="visit" href="https://patrarepair.com/" target="_blank" rel="noopener">visit →</a>
+        </div>
+      </div>
+      <div class="workitem" data-cat="corporate">
+        <span class="hash">5f6a8c0</span>
+        <div class="main"><strong>Caravi Patwa</strong><span>A portfolio that reads like a case study, not a brochure.</span></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="tag tag--corporate">corporate</span>
+          <a class="visit" href="https://caravipatwa.com/" target="_blank" rel="noopener">visit →</a>
+        </div>
+      </div>
+      <div class="workitem" data-cat="ngo">
+        <span class="hash">de41b7a</span>
+        <div class="main"><strong>The Rishi Foundation</strong><span>Program pages restructured so donors find their cause in two clicks.</span></div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <span class="tag tag--ngo">ngo</span>
+          <a class="visit" href="https://therishifoundation.org/" target="_blank" rel="noopener">visit →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRICING ============ -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="eyebrow">package.json → dependencies</div>
+    <h2 class="title">Pricing plans</h2>
+    <p class="lede">Three install sizes. Every plan ships responsive by default — and every add-on feature installs at no extra cost.</p>
+
+    <div class="region-toggle" id="region-toggle">
+      <button type="button" class="regionbtn active" data-region="global">--region=global</button>
+      <button type="button" class="regionbtn" data-region="india">--region=india 🇮🇳</button>
+    </div>
+    <div class="discount-banner" id="discount-banner">50% off every plan, all features included free · limited-time merge window</div>
+
+    <div class="pricegrid">
+      <div class="pricecard" data-old="499" data-cut="50">
+        <div class="pkgname">@webrefactor/<b>starter</b></div>
+        <h3>Starter</h3>
+        <div class="price"><span class="price-old">$499</span><span class="price-cut">-50%</span></div>
+        <div class="price" style="margin-top:4px;"><span class="price-live">$250</span> <span>/ project</span></div>
+        <div class="sub">Perfect for small businesses</div>
+        <ul class="depslist">
+          <li>5-page website</li>
+          <li>Responsive design</li>
+          <li>Basic SEO</li>
+          <li>Contact form</li>
+          <li>1 month of support</li>
+          <li>All add-ons free</li>
         </ul>
+        <a class="btn btn-outline" href="#contact">Get started</a>
+      </div>
+      <div class="pricecard popular" data-old="999" data-cut="50">
+        <div class="badge">most installed</div>
+        <div class="pkgname">@webrefactor/<b>pro</b></div>
+        <h3>Professional</h3>
+        <div class="price"><span class="price-old">$999</span><span class="price-cut">-50%</span></div>
+        <div class="price" style="margin-top:4px;"><span class="price-live">$500</span> <span>/ project</span></div>
+        <div class="sub">For growing businesses</div>
+        <ul class="depslist">
+          <li>10-page website</li>
+          <li>Responsive design</li>
+          <li>Advanced SEO</li>
+          <li>3 months of support</li>
+          <li>Basic e-commerce</li>
+          <li>CMS integration</li>
+          <li>All add-ons free</li>
+        </ul>
+        <a class="btn btn-primary" href="#contact">Get started</a>
+      </div>
+      <div class="pricecard" data-old="1999" data-cut="50">
+        <div class="pkgname">@webrefactor/<b>enterprise</b></div>
+        <h3>Enterprise</h3>
+        <div class="price"><span class="price-old">$1999</span><span class="price-cut">-50%</span></div>
+        <div class="price" style="margin-top:4px;"><span class="price-live">$1000</span> <span>/ project</span></div>
+        <div class="sub">For large organizations</div>
+        <ul class="depslist">
+          <li>Unlimited pages</li>
+          <li>Premium SEO</li>
+          <li>Custom forms</li>
+          <li>12 months of support</li>
+          <li>Full e-commerce</li>
+          <li>Custom CMS</li>
+          <li>All add-ons free</li>
+        </ul>
+        <a class="btn btn-outline" href="#contact">Get started</a>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="nav-actions">
-          <div id="google_translate_element"></div>
-          <div class="currency-selector">
-            <select id="currencySelect" aria-label="Select currency">
-              <option value="USD">USD $</option>
-              <option value="INR">INR ₹</option>
-              <option value="EUR">EUR €</option>
-              <option value="GBP">GBP £</option>
+<!-- ============ CALCULATOR ============ -->
+<section id="calculator">
+  <div class="wrap">
+    <div class="eyebrow">./estimate --interactive</div>
+    <h2 class="title">Price estimate calculator</h2>
+    <p class="lede">Set your flags below. The output updates as you type — no submit button, no waiting for a sales call.</p>
+
+    <div class="terminal">
+      <div class="term-head">
+        <div class="chrome-dots"><span></span><span></span><span></span></div>
+        <div class="lbl">estimate.sh — webrefactor</div>
+      </div>
+      <div class="term-body">
+        <div>
+          <div class="field">
+            <label>project-type</label>
+            <select id="c-type">
+              <option value="500">Basic website — $500</option>
+              <option value="1000" selected>Business website — $1000</option>
+              <option value="2000">E-commerce website — $2000</option>
+              <option value="3500">Custom web app — $3500</option>
+              <option value="5000">Enterprise solution — $5000</option>
             </select>
           </div>
+          <div class="field">
+            <label>pages</label>
+            <div class="rangewrap">
+              <input type="range" id="c-pages" min="1" max="30" value="5">
+              <span class="rangeval" id="c-pages-val">5</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>complexity</label>
+            <div class="radiorow" id="c-complexity">
+              <label class="radiopill checked"><input type="radio" name="complexity" value="1" checked>basic</label>
+              <label class="radiopill"><input type="radio" name="complexity" value="1.15">standard</label>
+              <label class="radiopill"><input type="radio" name="complexity" value="1.35">premium</label>
+            </div>
+          </div>
+          <div class="field">
+            <label>timeline</label>
+            <div class="radiorow" id="c-timeline">
+              <label class="radiopill checked"><input type="radio" name="timeline" value="1" checked>standard (4–6 wks)</label>
+              <label class="radiopill"><input type="radio" name="timeline" value="1.25">expedited (2–3 wks)</label>
+              <label class="radiopill"><input type="radio" name="timeline" value="1.5">rush (1 wk)</label>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="field">
+            <label>features</label>
+            <div class="checkgrid" id="c-features">
+              <label class="checkline"><input type="checkbox" value="0">e-commerce (free)</label>
+              <label class="checkline"><input type="checkbox" value="0">seo (free)</label>
+              <label class="checkline"><input type="checkbox" value="0">cms (free)</label>
+              <label class="checkline"><input type="checkbox" value="0">multi-language (free)</label>
+              <label class="checkline"><input type="checkbox" value="0">payment-gateway (free)</label>
+              <label class="checkline"><input type="checkbox" value="0">analytics (free)</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="output" id="c-output">
+          <div class="comment">// estimated cost · 50% off applied · add-ons free</div>
+          <div class="brace">{</div>
+          <div class="output-line"><span class="key">"USD"</span>: <span class="val" id="out-usd">$0</span>,</div>
+          <div class="output-line"><span class="key">"EUR"</span>: <span class="val" id="out-eur">€0</span>,</div>
+          <div class="output-line"><span class="key">"GBP"</span>: <span class="val" id="out-gbp">£0</span>,</div>
+          <div class="output-line"><span class="key">"INR"</span>: <span class="val" id="out-inr">₹0</span> <span class="comment">// india — 70% off</span></div>
+          <div class="brace">}</div>
+        </div>
+        <p class="calc-note">This is an estimate for planning purposes — final pricing depends on scope once we've talked through your project. India pricing reflects a regional 70% discount off the standard rate.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section id="reviews">
+  <div class="wrap">
+    <div class="eyebrow">merged pull requests</div>
+    <h2 class="title">What clients say after launch</h2>
+    <p class="lede">Six reviews, six approvals. No requested changes.</p>
+
+    <div class="reviewgrid">
+      <div class="reviewcard">
+        <div class="review-top">
+          <div class="avatar" style="background:var(--blue)">MS</div>
+          <div><div class="review-name">MD Sajid</div><div class="review-role">CEO, Zyozi</div></div>
+          <span class="approved">approved ✓</span>
+        </div>
+        <p>The rebuild changed how people experience our brand — sharp, on-brief, and genuinely ours.</p>
+      </div>
+      <div class="reviewcard">
+        <div class="review-top">
+          <div class="avatar" style="background:var(--purple)">BJ</div>
+          <div><div class="review-name">Bishwajit Jana</div><div class="review-role">Owner, Jana Aya Center</div></div>
+          <span class="approved">approved ✓</span>
+        </div>
+        <p>Good-looking and functional. Traffic went up within weeks of launch.</p>
+      </div>
+      <div class="reviewcard">
+        <div class="review-top">
+          <div class="avatar" style="background:var(--yellow)">GS</div>
+          <div><div class="review-name">Gouri Saha</div><div class="review-role">Owner, Gouri Sevapeeth</div></div>
+          <span class="approved">approved ✓</span>
+        </div>
+        <p>They understood what we were trying to say before we'd finished explaining it.</p>
+      </div>
+      <div class="reviewcard">
+        <div class="review-top">
+          <div class="avatar" style="background:var(--red)">SP</div>
+          <div><div class="review-name">Sajal Patra</div><div class="review-role">Owner, Patra Repair</div></div>
+          <span class="approved">approved ✓</span>
+        </div>
+        <p>The storefront is simple to manage and looks sharp on every device.</p>
+      </div>
+      <div class="reviewcard">
+        <div class="review-top">
+          <div class="avatar" style="background:var(--green)">RK</div>
+          <div><div class="review-name">Rajesh Kumar</div><div class="review-role">Director, Incorpiq</div></div>
+          <span class="approved">approved ✓</span>
+        </div>
+        <p>Clear communication start to finish, and the site shipped ahead of schedule.</p>
+      </div>
+      <div class="reviewcard">
+        <div class="review-top">
+          <div class="avatar" style="background:var(--blue)">PS</div>
+          <div><div class="review-name">Priya Sharma</div><div class="review-role">Founder, Pepedeals</div></div>
+          <span class="approved">approved ✓</span>
+        </div>
+        <p>Small details, big payoff — return on the rebuild showed up fast.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <div class="eyebrow">$ whoami</div>
+      <h2 class="title">Get in touch</h2>
+      <p class="lede">Have an idea worth shipping? Tell us what's broken and we'll tell you what we'd change.</p>
+      <div class="whoami">
+        <div><span class="k">email</span> &nbsp;<a class="v" href="mailto:admin@webrefactor.com">admin@webrefactor.com</a></div>
+        <div><span class="k">phone</span> &nbsp;<a class="v" href="tel:+918335086651">+91 83350 86651</a></div>
+        <div><span class="k">location</span> &nbsp;<span class="v">India</span></div>
+      </div>
+      <div class="social-row">
+        <a href="#" aria-label="X / Twitter">X</a>
+        <a href="#" aria-label="LinkedIn">in</a>
+        <a href="#" aria-label="Instagram">ig</a>
+        <a href="#" aria-label="Facebook">fb</a>
+      </div>
+
+      <div class="gh-badge">
+        <div class="gh-badge-top">
+          <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" style="color:var(--text-bright)"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+          <span class="gh-badge-name">isurojit / webrefactor</span>
+        </div>
+        <p class="gh-badge-desc">Open-source repo behind this rebuild. Fork it, break it, or just read the commit history.</p>
+        <div class="gh-badge-meta">
+          <span><span class="lang-dot"></span>TypeScript</span>
+          <span>★ 128</span>
+          <span>⑂ 24</span>
+          <span>MIT license</span>
+        </div>
+        <a class="btn btn-outline" href="https://github.com/isurojit/webrefactor" target="_blank" rel="noopener">View on GitHub →</a>
+      </div>
+    </div>
+
+    <div class="commitform">
+      <div class="prompt">$ git commit <b>-m</b> "…"</div>
+      <form id="contact-form">
+        <div class="formfield">
+          <label>--author</label>
+          <input type="text" placeholder="Your name" required>
+        </div>
+        <div class="formfield">
+          <label>--email</label>
+          <input type="email" placeholder="you@company.com" required>
+        </div>
+        <div class="formfield">
+          <label>commit body</label>
+          <textarea placeholder="What are we building?" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">push to webrefactor/main →</button>
+        <div class="form-msg" id="form-msg">✓ commit pushed. we'll pull this within 24h.</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footgrid">
+      <div>
+        <div class="foot-brand">web<span>refactor</span></div>
+        <p class="foot-desc">We build custom websites that blend clean implementation with a design system worth keeping.</p>
+        <div class="badgerow">
+          <div class="badge"><span>rating</span><span>4.8/5 ★</span></div>
+          <div class="badge"><span>reviews</span><span>50+</span></div>
         </div>
       </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main id="main-content">
-      <!-- Hero Section -->
-      <section id="home" class="hero-section" aria-labelledby="hero-title">
-        <div class="parallax-bg">
-          <div class="gradient-orb orb-1"></div>
-          <div class="gradient-orb orb-2"></div>
-          <div class="gradient-orb orb-3"></div>
-          <div class="gradient-orb orb-4"></div>
-        </div>
-
-        <div class="hero-particles" aria-hidden="true"></div>
-
-        <div class="hero-content">
-          <div class="hero-text" data-aos="fade-up" data-aos-duration="1200">
-            <span class="hero-badge">
-              <i class="fas fa-sparkles"></i> Welcome to Web Refactor
-            </span>
-            <h1 id="hero-title">
-              We Build
-              <span class="accent-gradient">Digital Excellence</span>
-            </h1>
-            <p class="hero-subtitle">Websites That Rank, Engage, and Convert</p>
-            <p class="hero-description">
-              We are Web Refactor. We love building great brands & digital
-              experiences. Transform your online presence with cutting-edge web
-              solutions tailored to your business needs.
-            </p>
-            <div class="hero-buttons">
-              <a href="#contact" class="btn btn-primary">
-                <i class="fas fa-rocket"></i> Start Project
-              </a>
-              <a href="#portfolio" class="btn btn-secondary">
-                <i class="fas fa-eye"></i> View Work
-              </a>
-            </div>
-            <div class="hero-stats">
-              <div class="stat-item">
-                <span class="stat-number" data-count="50">0</span>+
-                <span class="stat-label">Projects Completed</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-count="45">0</span>+
-                <span class="stat-label">Happy Clients</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-count="5">0</span>+
-                <span class="stat-label">Years Experience</span>
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="hero-visual"
-            data-aos="fade-left"
-            data-aos-duration="1400"
-          >
-            <div class="hero-image-container">
-              <div class="floating-card card-1">
-                <i class="fas fa-code"></i>
-                <span>Development</span>
-              </div>
-              <div class="floating-card card-2">
-                <i class="fas fa-paint-brush"></i>
-                <span>Design</span>
-              </div>
-              <div class="floating-card card-3">
-                <i class="fas fa-chart-line"></i>
-                <span>SEO</span>
-              </div>
-              <div class="floating-card card-4">
-                <i class="fas fa-mobile-alt"></i>
-                <span>Responsive</span>
-              </div>
-              <div class="floating-card card-5">
-                <i class="fas fa-shield-alt"></i>
-                <span>Secure</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="scroll-indicator">
-          <div class="mouse">
-            <div class="wheel"></div>
-          </div>
-          <p>Scroll Down</p>
-        </div>
-      </section>
-
-      <!-- Process Section -->
-      <section class="process-section" aria-labelledby="process-title">
-        <div class="container">
-          <h2 id="process-title" class="section-title" data-aos="fade-up">
-            Our Process
-          </h2>
-          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-            How We Bring Your Vision to Life
-          </p>
-
-          <div class="process-timeline">
-            <div class="process-card" data-aos="fade-up" data-aos-delay="200">
-              <div class="process-number">01</div>
-              <div class="process-icon">
-                <i class="fas fa-lightbulb"></i>
-              </div>
-              <h3>Define</h3>
-              <p>
-                Defining your brand means capturing what makes your business
-                unique and translating it into a cohesive identity with
-                compelling brand story and clear core values.
-              </p>
-            </div>
-
-            <div class="process-card" data-aos="fade-up" data-aos-delay="300">
-              <div class="process-number">02</div>
-              <div class="process-icon">
-                <i class="fas fa-palette"></i>
-              </div>
-              <h3>Design</h3>
-              <p>
-                We design your brand and website by blending your unique
-                identity with visually appealing and functional design that
-                captures your essence.
-              </p>
-            </div>
-
-            <div class="process-card" data-aos="fade-up" data-aos-delay="400">
-              <div class="process-number">03</div>
-              <div class="process-icon">
-                <i class="fas fa-cogs"></i>
-              </div>
-              <h3>Build</h3>
-              <p>
-                We build through a structured process: analyzing goals, crafting
-                strategic brand identity, and designing responsive,
-                high-performance sites.
-              </p>
-            </div>
-
-            <div class="process-card" data-aos="fade-up" data-aos-delay="500">
-              <div class="process-number">04</div>
-              <div class="process-icon">
-                <i class="fas fa-rocket"></i>
-              </div>
-              <h3>Launch</h3>
-              <p>
-                We launch by finalizing technical aspects, conducting thorough
-                testing, and optimizing for performance and SEO for impactful
-                day-one presence.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Services Section -->
-      <section
-        id="services"
-        class="services-section"
-        aria-labelledby="services-title"
-      >
-        <div class="container">
-          <h2 id="services-title" class="section-title" data-aos="fade-up">
-            Our Expertise
-          </h2>
-          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-            Transforming Ideas into Impactful Digital Solutions
-          </p>
-
-          <div class="services-grid">
-            <article
-              class="service-card"
-              data-aos="zoom-in"
-              data-aos-delay="100"
-            >
-              <div class="service-icon">
-                <i class="fas fa-laptop-code"></i>
-              </div>
-              <h3>Frontend Development</h3>
-              <p>
-                Creating dynamic, user-friendly interfaces using latest
-                technologies for responsive, visually appealing websites and web
-                applications.
-              </p>
-              <ul class="service-features">
-                <li><i class="fas fa-check"></i> React & Vue.js</li>
-                <li><i class="fas fa-check"></i> Responsive Design</li>
-                <li><i class="fas fa-check"></i> Performance Optimized</li>
-              </ul>
-            </article>
-
-            <article
-              class="service-card"
-              data-aos="zoom-in"
-              data-aos-delay="200"
-            >
-              <div class="service-icon">
-                <i class="fas fa-shopping-cart"></i>
-              </div>
-              <h3>E-Commerce</h3>
-              <p>
-                End-to-end solutions for building and optimizing online stores
-                with seamless transactions and engaging shopping experiences.
-              </p>
-              <ul class="service-features">
-                <li><i class="fas fa-check"></i> Payment Gateway</li>
-                <li><i class="fas fa-check"></i> Inventory Management</li>
-                <li><i class="fas fa-check"></i> Security First</li>
-              </ul>
-            </article>
-
-            <article
-              class="service-card"
-              data-aos="zoom-in"
-              data-aos-delay="300"
-            >
-              <div class="service-icon">
-                <i class="fas fa-search"></i>
-              </div>
-              <h3>SEO Optimization</h3>
-              <p>
-                Boost your online visibility with strategic SEO that drives
-                organic traffic and improves search engine rankings.
-              </p>
-              <ul class="service-features">
-                <li><i class="fas fa-check"></i> Keyword Research</li>
-                <li><i class="fas fa-check"></i> On-Page SEO</li>
-                <li><i class="fas fa-check"></i> Analytics & Reporting</li>
-              </ul>
-            </article>
-
-            <article
-              class="service-card"
-              data-aos="zoom-in"
-              data-aos-delay="400"
-            >
-              <div class="service-icon">
-                <i class="fas fa-paint-brush"></i>
-              </div>
-              <h3>Product Design</h3>
-              <p>
-                User-centered solutions with market research, concept
-                development, prototyping, and user testing.
-              </p>
-              <ul class="service-features">
-                <li><i class="fas fa-check"></i> UI/UX Design</li>
-                <li><i class="fas fa-check"></i> Prototyping</li>
-                <li><i class="fas fa-check"></i> User Testing</li>
-              </ul>
-            </article>
-
-            <article
-              class="service-card"
-              data-aos="zoom-in"
-              data-aos-delay="500"
-            >
-              <div class="service-icon">
-                <i class="fas fa-fingerprint"></i>
-              </div>
-              <h3>Branding</h3>
-              <p>
-                Build a strong, cohesive identity with unique brand story,
-                visual elements, and messaging that resonates.
-              </p>
-              <ul class="service-features">
-                <li><i class="fas fa-check"></i> Logo Design</li>
-                <li><i class="fas fa-check"></i> Brand Guidelines</li>
-                <li><i class="fas fa-check"></i> Visual Identity</li>
-              </ul>
-            </article>
-
-            <article
-              class="service-card"
-              data-aos="zoom-in"
-              data-aos-delay="600"
-            >
-              <div class="service-icon">
-                <i class="fas fa-users"></i>
-              </div>
-              <h3>UX Research</h3>
-              <p>
-                Deep insights into user behavior through interviews, surveys,
-                and usability testing to inform design decisions.
-              </p>
-              <ul class="service-features">
-                <li><i class="fas fa-check"></i> User Interviews</li>
-                <li><i class="fas fa-check"></i> Surveys</li>
-                <li><i class="fas fa-check"></i> Usability Testing</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- Portfolio Section -->
-      <section
-        id="portfolio"
-        class="portfolio-section"
-        aria-labelledby="portfolio-title"
-      >
-        <div class="container">
-          <h2 id="portfolio-title" class="section-title" data-aos="fade-up">
-            Recent Works
-          </h2>
-          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-            Here are some of our projects we've completed lately
-          </p>
-
-          <div
-            class="portfolio-filters"
-            data-aos="fade-up"
-            data-aos-delay="200"
-          >
-            <button class="filter-btn active" data-filter="all">All</button>
-            <button class="filter-btn" data-filter="ecommerce">
-              E-Commerce
-            </button>
-            <button class="filter-btn" data-filter="corporate">
-              Corporate
-            </button>
-            <button class="filter-btn" data-filter="ngo">NGO</button>
-            <button class="filter-btn" data-filter="service">Service</button>
-          </div>
-
-          <div class="portfolio-grid">
-            <article
-              class="portfolio-item"
-              data-category="corporate"
-              data-aos="fade-up"
-              data-aos-delay="100"
-            >
-              <div class="portfolio-image">
-                <img
-                  loading="lazy"
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0f2fe' width='400' height='300'/%3E%3Ctext fill='%233b82f6' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20'%3EIncorpiq%3C/text%3E%3C/svg%3E"
-                  alt="Incorpiq Corporate Website"
-                />
-                <div class="portfolio-overlay">
-                  <h3>Incorpiq</h3>
-                  <p>Corporate Website</p>
-                  <a
-                    href="https://incorpiq.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="portfolio-link"
-                  >
-                    <i class="fas fa-external-link-alt"></i> Visit Site
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <article
-              class="portfolio-item"
-              data-category="ecommerce"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <div class="portfolio-image">
-                <img
-                  loading="lazy"
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0f2fe' width='400' height='300'/%3E%3Ctext fill='%233b82f6' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20'%3EPepedeals%3C/text%3E%3C/svg%3E"
-                  alt="Pepedeals E-Commerce Platform"
-                />
-                <div class="portfolio-overlay">
-                  <h3>Pepedeals</h3>
-                  <p>E-Commerce Platform</p>
-                  <a
-                    href="https://pepedeals.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="portfolio-link"
-                  >
-                    <i class="fas fa-external-link-alt"></i> Visit Site
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <article
-              class="portfolio-item"
-              data-category="ecommerce"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              <div class="portfolio-image">
-                <img
-                  loading="lazy"
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0f2fe' width='400' height='300'/%3E%3Ctext fill='%233b82f6' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20'%3EZyozi%3C/text%3E%3C/svg%3E"
-                  alt="Zyozi E-Commerce"
-                />
-                <div class="portfolio-overlay">
-                  <h3>Zyozi</h3>
-                  <p>E-Commerce with Automation</p>
-                  <a
-                    href="https://zyozi.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="portfolio-link"
-                  >
-                    <i class="fas fa-external-link-alt"></i> Visit Site
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <article
-              class="portfolio-item"
-              data-category="ngo"
-              data-aos="fade-up"
-              data-aos-delay="400"
-            >
-              <div class="portfolio-image">
-                <img
-                  loading="lazy"
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0f2fe' width='400' height='300'/%3E%3Ctext fill='%233b82f6' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20'%3EGouri Sevapeeth%3C/text%3E%3C/svg%3E"
-                  alt="Gouri Sevapeeth NGO"
-                />
-                <div class="portfolio-overlay">
-                  <h3>Gouri Sevapeeth</h3>
-                  <p>NGO Website</p>
-                  <a
-                    href="https://gourisevapeeth.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="portfolio-link"
-                  >
-                    <i class="fas fa-external-link-alt"></i> Visit Site
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <article
-              class="portfolio-item"
-              data-category="service"
-              data-aos="fade-up"
-              data-aos-delay="500"
-            >
-              <div class="portfolio-image">
-                <img
-                  loading="lazy"
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0f2fe' width='400' height='300'/%3E%3Ctext fill='%233b82f6' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20'%3EPatra Repair%3C/text%3E%3C/svg%3E"
-                  alt="Patra Repair Service"
-                />
-                <div class="portfolio-overlay">
-                  <h3>Patra Repair</h3>
-                  <p>Service Based Website</p>
-                  <a
-                    href="https://patrarepair.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="portfolio-link"
-                  >
-                    <i class="fas fa-external-link-alt"></i> Visit Site
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <article
-              class="portfolio-item"
-              data-category="corporate"
-              data-aos="fade-up"
-              data-aos-delay="600"
-            >
-              <div class="portfolio-image">
-                <img
-                  loading="lazy"
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0f2fe' width='400' height='300'/%3E%3Ctext fill='%233b82f6' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20'%3ECaravi Patwa%3C/text%3E%3C/svg%3E"
-                  alt="Caravi Patwa Corporate"
-                />
-                <div class="portfolio-overlay">
-                  <h3>Caravi Patwa</h3>
-                  <p>Corporate Portfolio</p>
-                  <a
-                    href="https://caravipatwa.com/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="portfolio-link"
-                  >
-                    <i class="fas fa-external-link-alt"></i> Visit Site
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <article
-              class="portfolio-item"
-              data-category="ngo"
-              data-aos="fade-up"
-              data-aos-delay="700"
-            >
-              <div class="portfolio-image">
-                <img
-                  loading="lazy"
-                  src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23e0f2fe' width='400' height='300'/%3E%3Ctext fill='%233b82f6' x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-size='20'%3ERishi Foundation%3C/text%3E%3C/svg%3E"
-                  alt="The Rishi Foundation"
-                />
-                <div class="portfolio-overlay">
-                  <h3>The Rishi Foundation</h3>
-                  <p>NGO Organization</p>
-                  <a
-                    href="https://therishifoundation.org/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="portfolio-link"
-                  >
-                    <i class="fas fa-external-link-alt"></i> Visit Site
-                  </a>
-                </div>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- Pricing Section -->
-      <section
-        id="pricing"
-        class="pricing-section"
-        aria-labelledby="pricing-title"
-      >
-        <div class="container">
-          <h2 id="pricing-title" class="section-title" data-aos="fade-up">
-            Pricing Plans
-          </h2>
-          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-            Choose the perfect plan for your business
-          </p>
-
-          <div class="pricing-toggle" data-aos="fade-up" data-aos-delay="200">
-            <span class="toggle-label">Monthly</span>
-            <label class="switch">
-              <input type="checkbox" id="pricingToggle" />
-              <span class="slider"></span>
-            </label>
-            <span class="toggle-label"
-              >Yearly <span class="save-badge">Save 20%</span></span
-            >
-          </div>
-
-          <div class="pricing-grid">
-            <article
-              class="pricing-card"
-              data-aos="flip-left"
-              data-aos-delay="100"
-            >
-              <div class="pricing-header">
-                <h3>Starter</h3>
-                <p>Perfect for small businesses</p>
-              </div>
-              <div class="pricing-price">
-                <span class="currency-symbol">$</span>
-                <span
-                  class="price-amount"
-                  data-usd="499"
-                  data-inr="41500"
-                  data-eur="460"
-                  data-gbp="395"
-                  >499</span
-                >
-                <span class="price-period">/project</span>
-              </div>
-              <ul class="pricing-features">
-                <li><i class="fas fa-check-circle"></i> 5 Page Website</li>
-                <li><i class="fas fa-check-circle"></i> Responsive Design</li>
-                <li><i class="fas fa-check-circle"></i> Basic SEO</li>
-                <li><i class="fas fa-check-circle"></i> Contact Form</li>
-                <li><i class="fas fa-check-circle"></i> 1 Month Support</li>
-                <li class="disabled">
-                  <i class="fas fa-times-circle"></i> E-Commerce
-                </li>
-                <li class="disabled">
-                  <i class="fas fa-times-circle"></i> Custom CMS
-                </li>
-              </ul>
-              <a href="#contact" class="btn btn-primary">Get Started</a>
-            </article>
-
-            <article
-              class="pricing-card popular"
-              data-aos="flip-left"
-              data-aos-delay="200"
-            >
-              <div class="popular-badge">Most Popular</div>
-              <div class="pricing-header">
-                <h3>Professional</h3>
-                <p>For growing businesses</p>
-              </div>
-              <div class="pricing-price">
-                <span class="currency-symbol">$</span>
-                <span
-                  class="price-amount"
-                  data-usd="999"
-                  data-inr="83000"
-                  data-eur="920"
-                  data-gbp="790"
-                  >999</span
-                >
-                <span class="price-period">/project</span>
-              </div>
-              <ul class="pricing-features">
-                <li><i class="fas fa-check-circle"></i> 10 Page Website</li>
-                <li><i class="fas fa-check-circle"></i> Responsive Design</li>
-                <li><i class="fas fa-check-circle"></i> Advanced SEO</li>
-                <li><i class="fas fa-check-circle"></i> Contact Form</li>
-                <li><i class="fas fa-check-circle"></i> 3 Months Support</li>
-                <li><i class="fas fa-check-circle"></i> Basic E-Commerce</li>
-                <li><i class="fas fa-check-circle"></i> CMS Integration</li>
-              </ul>
-              <a href="#contact" class="btn btn-primary">Get Started</a>
-            </article>
-
-            <article
-              class="pricing-card"
-              data-aos="flip-left"
-              data-aos-delay="300"
-            >
-              <div class="pricing-header">
-                <h3>Enterprise</h3>
-                <p>For large organizations</p>
-              </div>
-              <div class="pricing-price">
-                <span class="currency-symbol">$</span>
-                <span
-                  class="price-amount"
-                  data-usd="1999"
-                  data-inr="166000"
-                  data-eur="1840"
-                  data-gbp="1580"
-                  >1999</span
-                >
-                <span class="price-period">/project</span>
-              </div>
-              <ul class="pricing-features">
-                <li><i class="fas fa-check-circle"></i> Unlimited Pages</li>
-                <li><i class="fas fa-check-circle"></i> Responsive Design</li>
-                <li><i class="fas fa-check-circle"></i> Premium SEO</li>
-                <li><i class="fas fa-check-circle"></i> Custom Forms</li>
-                <li><i class="fas fa-check-circle"></i> 12 Months Support</li>
-                <li><i class="fas fa-check-circle"></i> Full E-Commerce</li>
-                <li><i class="fas fa-check-circle"></i> Custom CMS</li>
-              </ul>
-              <a href="#contact" class="btn btn-primary">Get Started</a>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- Price Calculator Section -->
-      <section
-        id="calculator"
-        class="calculator-section"
-        aria-labelledby="calculator-title"
-      >
-        <div class="container">
-          <h2 id="calculator-title" class="section-title" data-aos="fade-up">
-            Price Estimate Calculator
-          </h2>
-          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-            Get an instant estimate for your project
-          </p>
-
-          <div
-            class="calculator-wrapper"
-            data-aos="zoom-in"
-            data-aos-delay="200"
-          >
-            <div class="calculator-form">
-              <div class="form-group">
-                <label for="projectType">Project Type</label>
-                <div class="select-wrapper">
-                  <select id="projectType">
-                    <option value="0">Select Project Type</option>
-                    <option value="500">Basic Website ($500)</option>
-                    <option value="1000">Business Website ($1000)</option>
-                    <option value="2000">E-Commerce Website ($2000)</option>
-                    <option value="3500">Custom Web App ($3500)</option>
-                    <option value="5000">Enterprise Solution ($5000)</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="pageCount"
-                  >Number of Pages: <span id="pageCountValue">5</span></label
-                >
-                <input type="range" id="pageCount" min="1" max="50" value="5" />
-              </div>
-
-              <div class="form-group">
-                <label>Additional Features</label>
-                <div class="checkbox-group">
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      value="300"
-                      class="feature-checkbox"
-                    />
-                    <span class="checkmark"></span>
-                    <span>E-Commerce Integration (+$300)</span>
-                  </label>
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      value="200"
-                      class="feature-checkbox"
-                    />
-                    <span class="checkmark"></span>
-                    <span>SEO Optimization (+$200)</span>
-                  </label>
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      value="250"
-                      class="feature-checkbox"
-                    />
-                    <span class="checkmark"></span>
-                    <span>CMS Integration (+$250)</span>
-                  </label>
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      value="150"
-                      class="feature-checkbox"
-                    />
-                    <span class="checkmark"></span>
-                    <span>Multi-language Support (+$150)</span>
-                  </label>
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      value="400"
-                      class="feature-checkbox"
-                    />
-                    <span class="checkmark"></span>
-                    <span>Payment Gateway (+$400)</span>
-                  </label>
-                  <label class="checkbox-label">
-                    <input
-                      type="checkbox"
-                      value="100"
-                      class="feature-checkbox"
-                    />
-                    <span class="checkmark"></span>
-                    <span>Analytics Setup (+$100)</span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label>Design Complexity</label>
-                <div class="radio-group">
-                  <label class="radio-label">
-                    <input type="radio" name="complexity" value="1" checked />
-                    <span class="radiomark"></span>
-                    <span>Basic</span>
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="complexity" value="1.5" />
-                    <span class="radiomark"></span>
-                    <span>Standard</span>
-                  </label>
-                  <label class="radio-label">
-                    <input type="radio" name="complexity" value="2" />
-                    <span class="radiomark"></span>
-                    <span>Premium</span>
-                  </label>
-                </div>
-              </div>
-
-              <div class="form-group">
-                <label for="timeline">Timeline</label>
-                <div class="select-wrapper">
-                  <select id="timeline">
-                    <option value="1">Standard (4-6 weeks)</option>
-                    <option value="1.25">Expedited (2-3 weeks) +25%</option>
-                    <option value="1.5">Rush (1 week) +50%</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="calculator-result">
-              <h3>Estimated Cost</h3>
-              <div class="result-display">
-                <div class="result-currency">
-                  <span class="currency-flag">🇺🇸</span>
-                  <span class="currency-label">USD</span>
-                  <span class="result-amount" id="resultUSD">$0</span>
-                </div>
-                <div class="result-currency">
-                  <span class="currency-flag">🇮🇳</span>
-                  <span class="currency-label">INR</span>
-                  <span class="result-amount" id="resultINR">₹0</span>
-                </div>
-                <div class="result-currency">
-                  <span class="currency-flag">🇪🇺</span>
-                  <span class="currency-label">EUR</span>
-                  <span class="result-amount" id="resultEUR">€0</span>
-                </div>
-                <div class="result-currency">
-                  <span class="currency-flag">🇬🇧</span>
-                  <span class="currency-label">GBP</span>
-                  <span class="result-amount" id="resultGBP">£0</span>
-                </div>
-              </div>
-              <p class="disclaimer">
-                *This is an estimate. Final pricing may vary based on specific
-                requirements.
-              </p>
-              <a href="#contact" class="btn btn-primary btn-block"
-                >Request Quote</a
-              >
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Testimonials Section -->
-      <section
-        class="testimonials-section"
-        aria-labelledby="testimonials-title"
-      >
-        <div class="container">
-          <h2 id="testimonials-title" class="section-title" data-aos="fade-up">
-            Client Reviews
-          </h2>
-          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-            What Our Clients Say About Us
-          </p>
-
-          <div
-            class="testimonials-swiper"
-            data-aos="fade-up"
-            data-aos-delay="200"
-          >
-            <div class="swiper">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide">
-                  <article class="testimonial-card">
-                    <div class="testimonial-rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <blockquote class="testimonial-text">
-                      "Working with this team was a game-changer for our
-                      business. They built a stunning website that truly
-                      reflects our brand."
-                    </blockquote>
-                    <footer class="testimonial-author">
-                      <div class="author-avatar">
-                        <i class="fas fa-user-circle"></i>
-                      </div>
-                      <div class="author-info">
-                        <cite>MD Sajid</cite>
-                        <span>CEO, Zyozi</span>
-                      </div>
-                    </footer>
-                  </article>
-                </div>
-
-                <div class="swiper-slide">
-                  <article class="testimonial-card">
-                    <div class="testimonial-rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <blockquote class="testimonial-text">
-                      "The custom website they created for us is both beautiful
-                      and functional. Their expertise has driven more traffic."
-                    </blockquote>
-                    <footer class="testimonial-author">
-                      <div class="author-avatar">
-                        <i class="fas fa-user-circle"></i>
-                      </div>
-                      <div class="author-info">
-                        <cite>Bishwajit Jana</cite>
-                        <span>Owner, Jana Aya Center</span>
-                      </div>
-                    </footer>
-                  </article>
-                </div>
-
-                <div class="swiper-slide">
-                  <article class="testimonial-card">
-                    <div class="testimonial-rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <blockquote class="testimonial-text">
-                      "We were impressed by their ability to understand our
-                      vision and turn it into a reality."
-                    </blockquote>
-                    <footer class="testimonial-author">
-                      <div class="author-avatar">
-                        <i class="fas fa-user-circle"></i>
-                      </div>
-                      <div class="author-info">
-                        <cite>Gouri Saha</cite>
-                        <span>Owner, Gouri Sevapeeth</span>
-                      </div>
-                    </footer>
-                  </article>
-                </div>
-
-                <div class="swiper-slide">
-                  <article class="testimonial-card">
-                    <div class="testimonial-rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <blockquote class="testimonial-text">
-                      "Their team exceeded our expectations. The e-commerce
-                      platform is sleek, responsive, and easy to manage."
-                    </blockquote>
-                    <footer class="testimonial-author">
-                      <div class="author-avatar">
-                        <i class="fas fa-user-circle"></i>
-                      </div>
-                      <div class="author-info">
-                        <cite>Sajal Patra</cite>
-                        <span>Owner, Patra Repair</span>
-                      </div>
-                    </footer>
-                  </article>
-                </div>
-
-                <div class="swiper-slide">
-                  <article class="testimonial-card">
-                    <div class="testimonial-rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                    </div>
-                    <blockquote class="testimonial-text">
-                      "Professional service with excellent communication. The
-                      final website exceeded all our expectations!"
-                    </blockquote>
-                    <footer class="testimonial-author">
-                      <div class="author-avatar">
-                        <i class="fas fa-user-circle"></i>
-                      </div>
-                      <div class="author-info">
-                        <cite>Rajesh Kumar</cite>
-                        <span>Director, Incorpiq</span>
-                      </div>
-                    </footer>
-                  </article>
-                </div>
-
-                <div class="swiper-slide">
-                  <article class="testimonial-card">
-                    <div class="testimonial-rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star-half-alt"></i>
-                    </div>
-                    <blockquote class="testimonial-text">
-                      "Amazing attention to detail and creative solutions. The
-                      ROI has been incredible!"
-                    </blockquote>
-                    <footer class="testimonial-author">
-                      <div class="author-avatar">
-                        <i class="fas fa-user-circle"></i>
-                      </div>
-                      <div class="author-info">
-                        <cite>Priya Sharma</cite>
-                        <span>Founder, Pepedeals</span>
-                      </div>
-                    </footer>
-                  </article>
-                </div>
-              </div>
-              <div class="swiper-pagination"></div>
-              <div class="swiper-button-next"></div>
-              <div class="swiper-button-prev"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Contact Section -->
-      <section
-        id="contact"
-        class="contact-section"
-        aria-labelledby="contact-title"
-      >
-        <div class="container">
-          <h2 id="contact-title" class="section-title" data-aos="fade-up">
-            Get In Touch
-          </h2>
-          <p class="section-subtitle" data-aos="fade-up" data-aos-delay="100">
-            Have an idea or an epic project in mind? Let's work together!
-          </p>
-
-          <div class="contact-grid">
-            <div
-              class="contact-info"
-              data-aos="fade-right"
-              data-aos-delay="200"
-            >
-              <h3>Contact Information</h3>
-              <address>
-                <div class="contact-item">
-                  <i class="fas fa-envelope"></i>
-                  <div>
-                    <h4>Email</h4>
-                    <p>
-                      <a href="mailto:admin@webrefactor.com"
-                        >admin@webrefactor.com</a
-                      >
-                    </p>
-                  </div>
-                </div>
-                <div class="contact-item">
-                  <i class="fas fa-phone"></i>
-                  <div>
-                    <h4>Phone</h4>
-                    <p><a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a></p>
-                  </div>
-                </div>
-                <div class="contact-item">
-                  <i class="fas fa-map-marker-alt"></i>
-                  <div>
-                    <h4>Location</h4>
-                    <p>India</p>
-                  </div>
-                </div>
-              </address>
-              <div class="social-links">
-                <a href="#" aria-label="Facebook"
-                  ><i class="fab fa-facebook-f"></i
-                ></a>
-                <a href="#" aria-label="Twitter"
-                  ><i class="fab fa-twitter"></i
-                ></a>
-                <a href="#" aria-label="LinkedIn"
-                  ><i class="fab fa-linkedin-in"></i
-                ></a>
-                <a href="#" aria-label="Instagram"
-                  ><i class="fab fa-instagram"></i
-                ></a>
-                <a
-                  href="https://github.com/isurojit/webrefactor"
-                  aria-label="GitHub"
-                  ><i class="fab fa-github"></i
-                ></a>
-              </div>
-            </div>
-
-            <div class="contact-form" data-aos="fade-left" data-aos-delay="300">
-              <form id="contactForm" method="POST">
-                <div class="form-row">
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      placeholder="Your Name"
-                      required
-                      autocomplete="name"
-                    />
-                  </div>
-                  <div class="form-group">
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      placeholder="Your Email"
-                      required
-                      autocomplete="email"
-                    />
-                  </div>
-                </div>
-                <div class="form-group">
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    placeholder="Subject"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows="5"
-                    placeholder="Your Message"
-                    required
-                  ></textarea>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">
-                  <i class="fas fa-paper-plane"></i> Send Message
-                </button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="footer" role="contentinfo">
-      <div class="container">
-        <div class="footer-grid">
-          <div class="footer-about">
-            <h2>Web<span class="accent">Refactor</span></h2>
-            <p>
-              We specialize in creating custom websites that blend innovative
-              design with top-notch functionality.
-            </p>
-          </div>
-
-          <nav class="footer-links" aria-label="Footer navigation">
-            <h4>Quick Links</h4>
-            <ul>
-              <li><a href="#home">Home</a></li>
-              <li><a href="#services">Services</a></li>
-              <li><a href="#portfolio">Portfolio</a></li>
-              <li><a href="#pricing">Pricing</a></li>
-              <li><a href="#contact">Contact</a></li>
-            </ul>
-          </nav>
-
-          <div class="footer-services">
-            <h4>Services</h4>
-            <ul>
-              <li>Web Development</li>
-              <li>E-Commerce</li>
-              <li>SEO Optimization</li>
-              <li>UI/UX Design</li>
-              <li>Digital Marketing</li>
-            </ul>
-          </div>
-
-          <div class="footer-newsletter">
-            <h4>Newsletter</h4>
-            <p>Subscribe to get latest updates</p>
-            <form class="newsletter-form">
-              <input type="email" placeholder="Your Email" required />
-              <button type="submit"><i class="fas fa-arrow-right"></i></button>
-            </form>
-          </div>
-        </div>
-
-        <div class="footer-bottom">
-          <p>
-            &copy; <span id="currentYear">2024</span> Web Refactor. All Rights
-            Reserved.
-          </p>
-          <div class="footer-reviews">
-            <span>Rated </span>
-            <div class="rating-stars">
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-            </div>
-            <span>4.8/5 based on 50+ reviews</span>
-          </div>
-        </div>
+      <div>
+        <h4>quick-links.md</h4>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#portfolio">Portfolio</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
       </div>
-    </footer>
+      <div>
+        <h4>services.md</h4>
+        <ul>
+          <li><a href="#services">Web Development</a></li>
+          <li><a href="#services">E-Commerce</a></li>
+          <li><a href="#services">SEO Optimization</a></li>
+          <li><a href="#services">UI/UX Design</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 WebRefactor — refactored, not rewritten.</span>
+      <span>MIT-style honesty, zero legalese.</span>
+    </div>
+  </div>
+</footer>
 
-    <!-- Scroll to Top -->
-    <button id="scrollTop" class="scroll-top" aria-label="Scroll to top">
-      <i class="fas fa-arrow-up"></i>
-    </button>
+<a class="wa-fab" href="https://wa.me/918335086651?text=Hi!%20I'd%20like%20to%20talk%20about%20a%20website." target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <span class="wa-icon">
+    <svg width="30" height="30" viewBox="0 0 24 24" fill="#fff"><path d="M17.47 14.38c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.48-1.76-1.66-2.06-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.6-.91-2.2-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.47 0 1.46 1.07 2.87 1.22 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.29.17-1.42-.07-.12-.27-.2-.57-.35z"/><path d="M12.01 2C6.5 2 2 6.48 2 12c0 1.85.5 3.58 1.36 5.07L2 22l5.06-1.32A9.94 9.94 0 0 0 12.01 22C17.52 22 22 17.52 22 12S17.52 2 12.01 2zm0 18.15c-1.63 0-3.16-.44-4.48-1.22l-.32-.19-3.01.79.8-2.93-.21-.3A8.14 8.14 0 0 1 3.85 12c0-4.5 3.66-8.15 8.16-8.15S20.16 7.5 20.16 12s-3.65 8.15-8.15 8.15z"/></svg>
+  </span>
+  <span class="wa-label">Chat on WhatsApp</span>
+</a>
 
-    <!-- Scripts -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script>
+// ---- theme toggle ----
+(function(){
+  var btns = document.querySelectorAll('#theme-toggle [data-theme-btn]');
+  var prefersLight = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+  function setTheme(mode){
+    if(mode === 'light'){ document.documentElement.setAttribute('data-theme','light'); }
+    else { document.documentElement.removeAttribute('data-theme'); }
+    btns.forEach(function(b){ b.classList.toggle('active', b.dataset.themeBtn === mode); });
+  }
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){ setTheme(b.dataset.themeBtn); });
+  });
+  setTheme(prefersLight ? 'light' : 'dark');
+})();
 
-    <!-- Google Translate -->
-    <script type="text/javascript">
-      function googleTranslateElementInit() {
-        new google.translate.TranslateElement(
-          {
-            pageLanguage: "en",
-            layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-          },
-          "google_translate_element",
-        );
+// ---- parallax on scroll ----
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce) return;
+  var frags = document.querySelectorAll('.frag');
+  var heroEl = document.querySelector('.hero');
+  var ticking = false;
+  function update(){
+    var y = window.scrollY;
+    frags.forEach(function(f){
+      var speed = parseFloat(f.dataset.speed) || 0.2;
+      f.style.transform = 'translateY(' + (y * speed * -1) + 'px)';
+    });
+    if(heroEl){
+      var offset = Math.min(y * 0.25, 120);
+      heroEl.style.setProperty('--glowY', offset + 'px');
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, { passive:true });
+  update();
+})();
+
+// ---- scrollspy on editor tabs ----
+(function(){
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('#tabs .tab'));
+  var sections = tabs.map(function(t){ return document.getElementById(t.dataset.target); }).filter(Boolean);
+  function setActive(id){
+    tabs.forEach(function(t){ t.classList.toggle('active', t.dataset.target === id); });
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ setActive(e.target.id); }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px', threshold: 0 });
+  sections.forEach(function(s){ io.observe(s); });
+})();
+
+// ---- expertise file tabs ----
+(function(){
+  var tabs = document.querySelectorAll('.filetab');
+  var panels = document.querySelectorAll('.filepanel');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      document.querySelector('.filepanel[data-panel="'+tab.dataset.panel+'"]').classList.add('active');
+    });
+  });
+})();
+
+// ---- pricing region toggle ----
+(function(){
+  var btns = document.querySelectorAll('#region-toggle .regionbtn');
+  var cards = document.querySelectorAll('.pricecard');
+  var banner = document.getElementById('discount-banner');
+  var inrRate = 83;
+
+  function render(region){
+    cards.forEach(function(card){
+      var old = parseFloat(card.dataset.old);
+      var oldEl = card.querySelector('.price-old');
+      var cutEl = card.querySelector('.price-cut');
+      var liveEl = card.querySelector('.price-live');
+      if(region === 'india'){
+        var indiaPrice = Math.round(old * 0.3 * inrRate);
+        oldEl.textContent = '₹' + Math.round(old * inrRate).toLocaleString('en-IN');
+        cutEl.textContent = '-70%';
+        liveEl.textContent = '₹' + indiaPrice.toLocaleString('en-IN');
+      } else {
+        oldEl.textContent = '$' + old;
+        cutEl.textContent = '-50%';
+        liveEl.textContent = '$' + Math.round(old * 0.5);
       }
-    </script>
-    <script
-      type="text/javascript"
-      src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
-    ></script>
+    });
+    banner.textContent = region === 'india'
+      ? '70% off every plan for India · all features included free · limited-time merge window'
+      : '50% off every plan · all features included free · limited-time merge window';
+  }
 
-    <!-- Main Script -->
-    <script src="script.js"></script>
-  </body>
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      render(btn.dataset.region);
+    });
+  });
+
+  render('global');
+})();
+
+// ---- portfolio filter ----
+(function(){
+  var btns = document.querySelectorAll('.filterbtn');
+  var items = document.querySelectorAll('.workitem');
+  btns.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btns.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      var f = btn.dataset.filter;
+      items.forEach(function(it){
+        it.style.display = (f === 'all' || it.dataset.cat === f) ? '' : 'none';
+      });
+    });
+  });
+})();
+
+// ---- radio pill styling ----
+(function(){
+  document.querySelectorAll('.radiopill input').forEach(function(input){
+    input.addEventListener('change', function(){
+      var group = document.getElementsByName(input.name);
+      group.forEach(function(g){ g.closest('.radiopill').classList.remove('checked'); });
+      input.closest('.radiopill').classList.add('checked');
+    });
+  });
+})();
+
+// ---- calculator ----
+(function(){
+  var typeSel = document.getElementById('c-type');
+  var pages = document.getElementById('c-pages');
+  var pagesVal = document.getElementById('c-pages-val');
+  var features = document.querySelectorAll('#c-features input');
+  var complexity = document.getElementsByName('complexity');
+  var timeline = document.getElementsByName('timeline');
+
+  var rates = { USD: 1, INR: 83, EUR: 0.92, GBP: 0.79 };
+  var symbols = { USD: '$', INR: '₹', EUR: '€', GBP: '£' };
+  var GLOBAL_DISCOUNT = 0.5;   // 50% off standard rate
+  var INDIA_DISCOUNT = 0.3;    // pay 30% = 70% off standard rate
+
+  function fmt(n, cur){
+    var v = n * rates[cur];
+    return symbols[cur] + Math.round(v).toLocaleString('en-US');
+  }
+
+  function compute(){
+    var base = parseFloat(typeSel.value);
+    var pageCount = parseInt(pages.value, 10);
+    pagesVal.textContent = pageCount;
+    var pageCost = Math.max(0, pageCount - 5) * 50;
+
+    // feature add-ons are free — kept in the loop in case pricing ever changes
+    var featureCost = 0;
+    features.forEach(function(f){ if(f.checked) featureCost += parseFloat(f.value); });
+
+    var complexityMult = 1, timelineMult = 1;
+    complexity.forEach(function(c){ if(c.checked) complexityMult = parseFloat(c.value); });
+    timeline.forEach(function(t){ if(t.checked) timelineMult = parseFloat(t.value); });
+
+    var subtotal = (base + pageCost + featureCost) * complexityMult * timelineMult;
+    var globalTotal = subtotal * GLOBAL_DISCOUNT;
+    var indiaTotal = subtotal * INDIA_DISCOUNT;
+
+    document.getElementById('out-usd').textContent = fmt(globalTotal, 'USD');
+    document.getElementById('out-eur').textContent = fmt(globalTotal, 'EUR');
+    document.getElementById('out-gbp').textContent = fmt(globalTotal, 'GBP');
+    document.getElementById('out-inr').textContent = fmt(indiaTotal, 'INR');
+  }
+
+  [typeSel, pages].forEach(function(el){ el.addEventListener('input', compute); });
+  features.forEach(function(f){ f.addEventListener('change', compute); });
+  complexity.forEach(function(c){ c.addEventListener('change', compute); });
+  timeline.forEach(function(t){ t.addEventListener('change', compute); });
+  compute();
+})();
+
+// ---- contact form (demo, no backend) ----
+(function(){
+  var form = document.getElementById('contact-form');
+  var msg = document.getElementById('form-msg');
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    msg.classList.add('show');
+    form.reset();
+  });
+})();
+</script>
+</body>
 </html>
